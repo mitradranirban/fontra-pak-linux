@@ -69,8 +69,7 @@ jobs:
         with:
           name: Fontra-Pak
           path: ./downloaded-artifact
-        outputs:
-          zip_name: FontraPakUbuntu
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         if: ${{ github.ref == 'refs/heads/main' }}
