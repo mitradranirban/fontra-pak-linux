@@ -57,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: ./downloaded-artifact
-          
+
       - name: Zip Ubuntu Artifact
         run: |
           cd ./downloaded-artifact/FontraPakUbuntu
