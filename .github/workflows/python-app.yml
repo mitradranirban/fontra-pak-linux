@@ -42,9 +42,6 @@ jobs:
         with:
           name: FontraPakUbuntu
           path: ./dist/*
-    
-    
-  
 
   upload-to-page:
     runs-on: ubuntu-latest
