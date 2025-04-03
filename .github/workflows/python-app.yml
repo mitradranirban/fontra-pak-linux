@@ -13,7 +13,7 @@ on:
 jobs:
   build-ubuntu-binary:
     runs-on: ubuntu-latest  
-    
+
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
@@ -42,9 +42,6 @@ jobs:
         with:
           name: fontrapak
           path: ./dist/*
-    
-    
-  
 
   upload-to-page:
     runs-on: ubuntu-latest
