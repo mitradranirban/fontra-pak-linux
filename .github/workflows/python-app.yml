@@ -12,8 +12,8 @@ on:
 
 jobs:
   build-ubuntu-binary:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-latest  
+    
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
@@ -40,8 +40,11 @@ jobs:
       - name: Storing Ubuntu Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: FontraPakUbuntu
+          name: fontrapak
           path: ./dist/*
+    
+    
+  
 
   upload-to-page:
     runs-on: ubuntu-latest
@@ -55,24 +58,24 @@ jobs:
         with:
           path: ./downloaded-artifact
 
-      - name: Zip Ubuntu Artifact
-        run: |
-          cd ./downloaded-artifact/FontraPakUbuntu
-          zip -q FontraPakUbuntu.zip "Fontra Pak"
-
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: ./downloaded-artifact
 
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v4
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
         with:
-          name: Fontra-Pak
           path: ./downloaded-artifact
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
