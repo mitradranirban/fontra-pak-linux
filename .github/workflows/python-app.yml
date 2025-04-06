@@ -32,6 +32,7 @@ jobs:
       - name: Build exe
         run: |
           pyinstaller FontraPak.spec -y
+          mv dist/Fontra\ Pak dist/fontrapak
 
       - name: Run tests
         run: |
@@ -42,5 +43,3 @@ jobs:
         with:
           name: fontrapak
           path: ./dist/*
-
- 
