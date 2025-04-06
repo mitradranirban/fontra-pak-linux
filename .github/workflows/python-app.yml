@@ -43,36 +43,4 @@ jobs:
           name: fontrapak
           path: ./dist/*
 
-  upload-to-page:
-    runs-on: ubuntu-latest
-    needs: [build-ubuntu-binary ]
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-
-      - name: Retrieve Artifact
-        uses: actions/download-artifact@v4
-        with:
-          path: ./downloaded-artifact
-
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: ./downloaded-artifact
-
-      - name: Upload static files as artifact
-        id: deployment
-        uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
-        with:
-          path: ./downloaded-artifact
-
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build-ubuntu-binary
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+ 
