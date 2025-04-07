@@ -39,7 +39,12 @@ jobs:
           pytest
 
       - name: Storing Ubuntu Artifacts
+        id: upload_artifact
         uses: actions/upload-artifact@v4
         with:
           name: fontrapak
           path: ./dist/*
+      - name: Extract Artifact URL
+        run: |
+          echo "Artifact URL is: ${{ steps.upload_artifact.outputs.artifact-url }}"
+
