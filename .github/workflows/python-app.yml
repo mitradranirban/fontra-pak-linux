@@ -47,4 +47,3 @@ jobs:
       - name: Extract Artifact URL
         run: |
           echo "Artifact URL is: ${{ steps.upload_artifact.outputs.artifact-url }}"
-
