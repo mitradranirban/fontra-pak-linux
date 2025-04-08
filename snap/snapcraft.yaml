@@ -9,7 +9,7 @@ description: |
    can do. Originally developed to make the design and production of large
    CJK fonts more efficient, Fontra provides deeper integration of 
    variable font technology and improved   usability of variable 
-   components as design elements. 
+   components as design elements.
 
 grade:  stable
 confinement: strict
@@ -30,7 +30,7 @@ parts:
     source: .
 
 icon: gui/fontrapak.svg
-license: GPL-3.0+ 
+license: GPL-3.0+
 
 plugs:
   shared-memory:
