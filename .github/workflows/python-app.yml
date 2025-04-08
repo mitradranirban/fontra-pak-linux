@@ -47,3 +47,23 @@ jobs:
       - name: Extract Artifact URL
         run: |
           echo "Artifact URL is: ${{ steps.upload_artifact.outputs.artifact-url }}"
+  add-artifact-to-repository:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: switching from HTTPS to SSH
+      run: git remote set-url origin ${{ secrets.ssh }}
+    - name: download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: fontrapak
+        path: ${{github.workspace}}/snap
+    - name: stage changed files
+      run: git add .
+    - name: commit changed files
+      run: git commit -m "Auto updating fontrapak app"
+    - name: fetch from master
+      run: git fetch origin master
+    - name: push code to master
+      run: git push origin HEAD:master

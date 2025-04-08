@@ -1,0 +1,110 @@
+name: fontrapak 
+title: Fontra Pak (Unofficial snap package)
+base: core22 # the base snap is the execution environment for this snap
+version: '0.1.dev11289+ge9a76b2'
+summary: Browser-based variable-first font editor # 79 char long summary
+description: |
+  Fontra is an open-source, browser-based, cross-platform, variable-first
+   font editor. Fontra extends the boundaries of what current font editors
+   can do. Originally developed to make the design and production of large
+   CJK fonts more efficient, Fontra provides deeper integration of 
+   variable font technology and improved   usability of variable 
+   components as design elements. 
+
+grade:  stable
+confinement: strict
+
+architectures:
+  - build-on: amd64
+    build-for: amd64
+
+parts:
+  fontrapak:
+    stage-packages:
+    - libgl1
+    - libegl1
+    - libxcb-cursor0
+    - libxcb1
+
+    plugin: dump
+    source: .
+
+icon: gui/fontrapak.svg
+license: GPL-3.0+ 
+
+plugs:
+  shared-memory:
+    private: true
+
+apps:
+  fontrapak:
+    command: bin/fontrapak
+    extensions: [kde-neon]
+    environment:
+      QT_QPA_PLATFORM: xcb # Required for Qt applications in a snap
+    plugs:
+      - x11
+      - unity7
+      - opengl
+      - network # if any network access is needed
+      - home # if it needs access to user home directory
+      - removable-media # if it needs access to removable media.
+      - desktop
+      - desktop-legacy
+      - wayland # for wayland support
+
+# If you have any desktop integration files (.desktop, icons), add them here:
+#install: |
+#  mkdir -p $SNAPCRAFT_PART_INSTALL/share/applications
+#  cp snap/gui/fontrapak.desktop $SNAPCRAFT_PART_INSTALL/share/applications/
+#  mkdir -p $SNAPCRAFT_PART_INSTALL/share/icons/hicolor/scalable/apps
+#  cp snap/gui/fontrapak.svg $SNAPCRAFT_PART_INSTALL/share/icons/hicolor/scalable/apps/
+#
+build-packages:
+# - libgl1-mesa-dev # If you have openGL issues
+# - libgl1
+# - libxcb-util-dev # if you have xcb issues
+# - libxcb-icccm4-dev
+# - libxcb-keysyms1-dev
+# - libxcb-render-util0-dev
+# - libxcb-shm0-dev
+# - libxcb1-dev
+# - libxkbcommon-dev
+# - libxkbcommon-x11-dev
+# - libxrender-dev
+# - libsm-dev
+# - libxext-dev
+# - libx11-dev
+# - libxau-dev
+# - libxdmcp-dev
+# - libxcomposite-dev
+# - libxcursor-dev
+# - libxdamage-dev
+# - libxi-dev
+# - libxtst-dev
+# - libxt-dev
+# - libxrandr-dev
+# - libxfixes-dev
+# - libxscrnsaver-dev
+# - libice-dev
+# - libuuid-dev
+# - libdbus-1-dev
+# - libfontconfig1-dev
+# - libfreetype6-dev
+# - libzstd-dev
+# - zlib1g-dev
+# - libglib2.0-dev
+# - libpcre3-dev
+# - libpng-dev
+# - libjpeg-dev
+# - libtiff-dev
+# - libwebp-dev
+# - libopenjp2-7-dev
+# - liblcms2-dev
+# - libicu-dev
+# - libsqlite3-dev
+# - libxslt1-dev
+# - libxml2-dev
+# - libssl-dev
+# - libffi-dev
+ - libpython3-dev # If you have python dependency issues

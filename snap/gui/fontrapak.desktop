@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=0.1
+Terminal=false
+Type=Application
+Name=fontrapak
+Icon=Icon=${SNAP}/meta/gui/fontrapak.svg
+Exec=fontrapak
