@@ -47,7 +47,6 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-        name: fontrapak
         path: /bin
       - name: stage changed files
         run: git add .
