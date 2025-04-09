@@ -2,6 +2,9 @@ name: Download Artifact and add to repository
 
 on:
   workflow_dispatch:
+    workflows: ["Build and Upload Artifact"]
+    types:
+      - completed
 
 jobs:
   download:
