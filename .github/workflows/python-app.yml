@@ -44,30 +44,3 @@ jobs:
         with:
           name: fontrapak
           path: ./dist/*
-
-name: Download Artifact and add to repository
-
-on:
-  workflow_dispatch:
-
-jobs:
-  download:
-    runs-on: ubuntu-22.04
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Download Artifact to bin folder
-      uses: actions/download-artifact@v4
-      with:
-        name: fontrapak
-        path: bin
-
-    - name: Display structure of bin folder
-      run: ls -R bin
-    - name: add files to repository
-      run: git add .
-    - name: commit file to repository
-      run: git commit -m 'Add binary to repository'
-
