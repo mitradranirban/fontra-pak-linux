@@ -1,4 +1,4 @@
-name: fontrapak 
+name: fontrapak
 title: Fontra Pak (Unofficial snap package)
 base: core22 # the base snap is the execution environment for this snap
 version: '0.1.dev11289+ge9a76b2'
@@ -7,8 +7,8 @@ description: |
   Fontra is an open-source, browser-based, cross-platform, variable-first
    font editor. Fontra extends the boundaries of what current font editors
    can do. Originally developed to make the design and production of large
-   CJK fonts more efficient, Fontra provides deeper integration of 
-   variable font technology and improved   usability of variable 
+   CJK fonts more efficient, Fontra provides deeper integration of
+   variable font technology and improved   usability of variable
    components as design elements.
 
 grade:  stable
