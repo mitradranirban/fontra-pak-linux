@@ -52,7 +52,7 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ./downloaded-artifact
+        working-directory: ./dl
 
       - name: Upload via ftp
         uses: sebastianpopp/ftp-action@releases/v2
