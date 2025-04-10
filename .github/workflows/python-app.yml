@@ -38,3 +38,28 @@ jobs:
         with:
           name: fontrapak
           path: ./dist/*
+  upload-to-download-server:
+    runs-on: ubuntu-22.04
+    needs: [build-ubuntu-binary]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+
+      - name: Retrieve Artifact
+        uses: actions/download-artifact@v4
+        with:
+          path: ./dl
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ./downloaded-artifact
+
+      - name: Upload via ftp
+        uses: genietim/ftp-action@releases/v4
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          localDir: "dl"
+          remoteDir: "fontrapak"
+

@@ -1,15 +1,15 @@
-name: fontrapak
+name: fontrapak 
 title: Fontra Pak (Unofficial snap package)
 base: core22 # the base snap is the execution environment for this snap
-version: '0.1.dev11289+ge9a76b2'
+version: '0.1.dev11293+g1fc208d'
 summary: Browser-based variable-first font editor # 79 char long summary
 description: |
   Fontra is an open-source, browser-based, cross-platform, variable-first
    font editor. Fontra extends the boundaries of what current font editors
    can do. Originally developed to make the design and production of large
-   CJK fonts more efficient, Fontra provides deeper integration of
-   variable font technology and improved   usability of variable
-   components as design elements.
+   CJK fonts more efficient, Fontra provides deeper integration of 
+   variable font technology and improved   usability of variable 
+   components as design elements. 
 
 grade:  stable
 confinement: strict
@@ -27,10 +27,10 @@ parts:
     - libxcb1
 
     plugin: dump
-    source: .
+    source: https://atipra.in/fontrapak/fontrapak.zip
 
-icon: gui/fontrapak.svg
-license: GPL-3.0+
+icon: snap/gui/fontrapak.svg
+license: GPL-3.0+ 
 
 plugs:
   shared-memory:
@@ -38,8 +38,8 @@ plugs:
 
 apps:
   fontrapak:
-    command: bin/fontrapak
-    extensions: [kde-neon]
+    command: fontrapak
+    extensions: [gnome]
     environment:
       QT_QPA_PLATFORM: xcb # Required for Qt applications in a snap
     plugs:

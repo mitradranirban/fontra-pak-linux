@@ -1,6 +1,9 @@
 name: Download Artifact and add to repository
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     workflows: ["Build and Upload Artifact"]
     types:
