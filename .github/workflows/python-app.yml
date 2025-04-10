@@ -55,7 +55,7 @@ jobs:
         working-directory: ./downloaded-artifact
 
       - name: Upload via ftp
-        uses: genietim/ftp-action@releases/v4
+        uses: sebastianpopp/ftp-action@releases/v2
         with:
           host: ${{ secrets.FTP_SERVER }}
           user: ${{ secrets.FTP_USERNAME }}
