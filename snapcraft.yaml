@@ -1,17 +1,19 @@
-name: fontrapak 
+
+
+name: fontrapak
 title: Fontra Pak (Unofficial snap package)
 base: core22 # the base snap is the execution environment for this snap
 version: '0.1.dev11293+g1fc208d'
 summary: Browser-based variable-first font editor # 79 char long summary
 description: |
   Fontra is an open-source, browser-based, cross-platform, variable-first
-   font editor. Fontra extends the boundaries of what current font editors
-   can do. Originally developed to make the design and production of large
-   CJK fonts more efficient, Fontra provides deeper integration of 
-   variable font technology and improved   usability of variable 
-   components as design elements. 
+  font editor. Fontra extends the boundaries of what current font editors
+  can do. Originally developed to make the design and production of large
+  CJK fonts more efficient, Fontra provides deeper integration of
+  variable font technology and improved    usability of variable
+  components as design elements.
 
-grade:  stable
+grade: stable
 confinement: strict
 
 architectures:
@@ -20,17 +22,31 @@ architectures:
 
 parts:
   fontrapak:
-    stage-packages:
-    - libgl1
-    - libegl1
-    - libxcb-cursor0
-    - libxcb1
-
     plugin: dump
-    source: https://atipra.in/fontrapak/fontrapak.zip
+    source: .
+    organize:
+      fontrapak: bin/fontrapak
+    stage-packages:
+      - libgl1
+      - libegl1
+      - libxcb-cursor0  # Add this explicitly
+      - libxcb1
+      - libxcb-render0
+      - libxcb-shm0
+      - libxcb-randr0
+      - libxcb-xfixes0
+      - libxkbcommon0
+      - libqt5gui5        # Often needed for Qt applications
+      - libqt5core5a      # Core Qt libraries
+      - libqt5widgets5    # If your application uses widgets
+      - libqt6gui6        # If your application uses Qt 6
+      - libqt6core6       # Core Qt 6 libraries
+      - libqt6widgets6    # If your application uses Qt 6 widgets
+      - libstdc++6        # Standard C++ library (often a dependency)
+
 
 icon: snap/gui/fontrapak.svg
-license: GPL-3.0+ 
+license: GPL-3.0+
 
 plugs:
   shared-memory:
@@ -38,10 +54,12 @@ plugs:
 
 apps:
   fontrapak:
-    command: fontrapak
-    extensions: [gnome]
+    command: bin/fontrapak
+    #extensions: [gnome]
     environment:
-      QT_QPA_PLATFORM: xcb # Required for Qt applications in a snap
+      QT_QPA_PLATFORM: xcb # Required for Qt applications in a snap (PyInstaller often uses Qt)
+      QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6/plugins/platforms # Explicitly set plugin path
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa # Include Mesa libraries if needed
     plugs:
       - x11
       - unity7
@@ -52,59 +70,3 @@ apps:
       - desktop
       - desktop-legacy
       - wayland # for wayland support
-
-# If you have any desktop integration files (.desktop, icons), add them here:
-#install: |
-#  mkdir -p $SNAPCRAFT_PART_INSTALL/share/applications
-#  cp snap/gui/fontrapak.desktop $SNAPCRAFT_PART_INSTALL/share/applications/
-#  mkdir -p $SNAPCRAFT_PART_INSTALL/share/icons/hicolor/scalable/apps
-#  cp snap/gui/fontrapak.svg $SNAPCRAFT_PART_INSTALL/share/icons/hicolor/scalable/apps/
-#
-build-packages:
-# - libgl1-mesa-dev # If you have openGL issues
-# - libgl1
-# - libxcb-util-dev # if you have xcb issues
-# - libxcb-icccm4-dev
-# - libxcb-keysyms1-dev
-# - libxcb-render-util0-dev
-# - libxcb-shm0-dev
-# - libxcb1-dev
-# - libxkbcommon-dev
-# - libxkbcommon-x11-dev
-# - libxrender-dev
-# - libsm-dev
-# - libxext-dev
-# - libx11-dev
-# - libxau-dev
-# - libxdmcp-dev
-# - libxcomposite-dev
-# - libxcursor-dev
-# - libxdamage-dev
-# - libxi-dev
-# - libxtst-dev
-# - libxt-dev
-# - libxrandr-dev
-# - libxfixes-dev
-# - libxscrnsaver-dev
-# - libice-dev
-# - libuuid-dev
-# - libdbus-1-dev
-# - libfontconfig1-dev
-# - libfreetype6-dev
-# - libzstd-dev
-# - zlib1g-dev
-# - libglib2.0-dev
-# - libpcre3-dev
-# - libpng-dev
-# - libjpeg-dev
-# - libtiff-dev
-# - libwebp-dev
-# - libopenjp2-7-dev
-# - liblcms2-dev
-# - libicu-dev
-# - libsqlite3-dev
-# - libxslt1-dev
-# - libxml2-dev
-# - libssl-dev
-# - libffi-dev
- - libpython3-dev # If you have python dependency issues
