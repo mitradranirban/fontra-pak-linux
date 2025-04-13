@@ -62,4 +62,5 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           localDir: "dl"
           remoteDir: "fontrapak"
+          forceSsl: true
 
