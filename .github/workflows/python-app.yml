@@ -53,14 +53,15 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: ./dl
-
-      - name: Upload via ftp
-        uses: sebastianpopp/ftp-action@releases/v2
+      
+      - name: Upload Artifact
+        uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.FTP_SERVER }}
-          user: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          localDir: "dl"
-          remoteDir: "fontrapak"
-          forceSsl: true
-
+          host: ${{ secrets.ATIPRA_DOWNLOAD_HOST }}
+          username: ${{ secrets.ATIPRA_DOWNLOAD_USERNAME }}
+          password: ${{ secrets.ATIPRA_DOWNLOAD_PASSWORD }}
+          source: "./dl/fontrapak"
+          target: "/public_html/fonts/fontrapak"
+          strip_components: 3
+          debug: true
+          overwrite: true
