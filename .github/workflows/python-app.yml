@@ -32,6 +32,10 @@ jobs:
         run: |
           pytest
 
+      - name: Query __version__ string and add to version.txt
+        id: query-version
+        run: |
+          echo $(python -c "import fontra; print(fontra.__version__)") > ./dist/version.txt
       - name: Storing Ubuntu Artifacts
         id: upload_artifact
         uses: actions/upload-artifact@v4
