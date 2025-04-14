@@ -56,7 +56,7 @@ jobs:
       - name: tar gzip file
         run: |
           cd ./dl
-          tar -zvf fontrapak.tgz "fontrapak"
+          tar -czvf fontrapak.tgz "fontrapak"
 
       - name: Upload via ftp
         uses: sebastianpopp/ftp-action@releases/v2
@@ -67,4 +67,3 @@ jobs:
            localDir: "dl"
            remoteDir: "public_html/fonts/fontrapak"
            forceSsl: true
-
