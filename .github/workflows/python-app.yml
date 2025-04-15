@@ -54,9 +54,11 @@ jobs:
         with:
           path: ./dl
 
-      - name: Display structure of downloaded files
+      - name: Display structure of downloaded files 
         run: ls -R
         working-directory: ./dl
+      - name: make binary executable
+        run: chmod +x ./dl/fontrapak/fontrapak
       - name: tar gzip file
         run: |
           cd ./dl
