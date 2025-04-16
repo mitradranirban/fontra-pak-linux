@@ -1,8 +1,14 @@
 name: Build and Upload Artifact
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: "21 1 * * 1-5"
+  workflow_dispatch: # allow manual trigger
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+
 
 jobs:
   build-ubuntu-binary:
@@ -54,15 +60,16 @@ jobs:
         with:
           path: ./dl
 
-      - name: Display structure of downloaded files 
-        run: ls -R
-        working-directory: ./dl
+      
       - name: make binary executable
         run: chmod +x ./dl/fontrapak/fontrapak
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ./dl
       - name: tar gzip file
         run: |
           cd ./dl
-          tar -czvf fontrapak.tgz "fontrapak"
+          tar -czvf fontrapak.tgz fontrapak version.txt
 
       - name: Upload via ftp
         uses: sebastianpopp/ftp-action@releases/v2
