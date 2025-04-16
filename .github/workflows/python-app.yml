@@ -67,7 +67,7 @@ jobs:
       - name: tar gzip file
         run: |
           cd ./dl
-          tar -czvf fontrapak.tgz fontrapak version.txt
+          tar -czvf fontrapak.tgz "fontrapak"
 
       - name: Upload via ftp
         uses: sebastianpopp/ftp-action@releases/v2
