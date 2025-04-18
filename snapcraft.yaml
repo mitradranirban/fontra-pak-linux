@@ -46,27 +46,31 @@ parts:
     build-snaps:
       - nodejs --channel=16/stable   # Request Node.js 16 from the snap store
     override-build: |
-      # Determine the mount point of the nodejs snap (this might vary slightly)
-      NODEJS_SNAP_MOUNT=$(find /snap -name "nodejs" -maxdepth 1)
+      # Try to get the installation path using craftctl
+      NODEJS_SNAP_MOUNT=$(craftctl get-path part-install)/nodejs
 
-      # Check if the mount point was found
-      if [ -n "$NODEJS_SNAP_MOUNT" ]; then
-        # Add the bin directory within the mount point to the PATH
-        export PATH="$NODEJS_SNAP_MOUNT/bin:$PATH"
-
-        # Verify the Node.js and npm versions using their full paths
-        "$NODEJS_SNAP_MOUNT/bin/node" -v
-        "$NODEJS_SNAP_MOUNT/bin/npm" -v
-
-        # Install npm dependencies
-        npm install
-
-        # Proceed with the default Python build process
-        craftctl build
-      else
-        echo "Error: Could not find the nodejs snap mount point."
-        exit 1
+      # Check if the path is valid
+      if [ ! -d "$NODEJS_SNAP_MOUNT" ]; then
+        echo "Error: Could not find nodejs at $NODEJS_SNAP_MOUNT.  Falling back to /snap/nodejs/current"
+        NODEJS_SNAP_MOUNT="/snap/nodejs/current"
+        if [ ! -d "$NODEJS_SNAP_MOUNT" ]; then
+           echo "Error: Could not find nodejs at /snap/nodejs/current.  Aborting"
+           exit 1
+        fi
       fi
+      
+      # Add the bin directory within the mount point to the PATH
+      export PATH="$NODEJS_SNAP_MOUNT/bin:$PATH"
+
+      # Verify the Node.js and npm versions
+      node -v
+      npm -v
+
+      # Install npm dependencies
+      npm install
+
+      # Proceed with the default Python build process
+      craftctl build
 
 icon: snap/gui/fontrapak.svg
 license: GPL-3.0+
@@ -92,3 +96,4 @@ apps:
       - desktop
       - desktop-legacy
       - wayland # for wayland support
+
