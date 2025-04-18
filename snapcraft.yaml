@@ -46,18 +46,27 @@ parts:
     build-snaps:
       - nodejs --channel=16/stable   # Request Node.js 16 from the snap store
     override-build: |
-      # Try adding the common bin directory for build snaps to the PATH
-      export PATH="/snap/bin:$PATH"
+      # Determine the mount point of the nodejs snap (this might vary slightly)
+      NODEJS_SNAP_MOUNT=$(find /snap -name "nodejs" -maxdepth 1)
 
-      # Verify the Node.js and npm versions
-      node -v
-      npm -v
+      # Check if the mount point was found
+      if [ -n "$NODEJS_SNAP_MOUNT" ]; then
+        # Add the bin directory within the mount point to the PATH
+        export PATH="$NODEJS_SNAP_MOUNT/bin:$PATH"
 
-      # Install npm dependencies
-      npm install
+        # Verify the Node.js and npm versions using their full paths
+        "$NODEJS_SNAP_MOUNT/bin/node" -v
+        "$NODEJS_SNAP_MOUNT/bin/npm" -v
 
-      # Proceed with the default Python build process
-      craftctl build
+        # Install npm dependencies
+        npm install
+
+        # Proceed with the default Python build process
+        craftctl build
+      else
+        echo "Error: Could not find the nodejs snap mount point."
+        exit 1
+    fi
 
 icon: snap/gui/fontrapak.svg
 license: GPL-3.0+
