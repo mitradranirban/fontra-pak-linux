@@ -47,7 +47,7 @@ parts:
       - nodejs --channel=16/stable   # Request Node.js 16 from the snap store
     override-build: |
       # Find the mount point of the nodejs snap
-      NODEJS_SNAP_MOUNT=$(snapcraftctl get-host-path "/snap/nodejs/current")
+      NODEJS_SNAP_MOUNT=$(craftctl get-host-path "/snap/nodejs/current")
 
       # Add the nodejs bin directory to the PATH
       export PATH="$NODEJS_SNAP_MOUNT/bin:$PATH"
@@ -58,6 +58,9 @@ parts:
 
       # Install npm dependencies
       npm install
+      # Proceed with the default Python build process
+      craftctl build
+
 
 icon: snap/gui/fontrapak.svg
 license: GPL-3.0+
