@@ -88,4 +88,3 @@ apps:
       - desktop
       - desktop-legacy
       - wayland # for wayland support
-
