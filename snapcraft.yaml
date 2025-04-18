@@ -1,6 +1,6 @@
 name: fontrapak
 title: Fontra Pak (Unofficial snap package)
-base: core24 # the base snap is the execution environment for this snap
+base: core22 # the base snap is the execution environment for this snap
 version: '0.1.dev11310'
 summary: Browser-based variable-first font editor # 79 char long summary
 description: |
