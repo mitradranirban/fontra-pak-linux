@@ -1,16 +1,14 @@
-
-
 name: fontrapak
 title: Fontra Pak (Unofficial snap package)
-base: core22 # the base snap is the execution environment for this snap
-version: '0.1.dev11293+g1fc208d'
+base: core24 # the base snap is the execution environment for this snap
+version: '0.1.dev11310'
 summary: Browser-based variable-first font editor # 79 char long summary
 description: |
   Fontra is an open-source, browser-based, cross-platform, variable-first
   font editor. Fontra extends the boundaries of what current font editors
   can do. Originally developed to make the design and production of large
   CJK fonts more efficient, Fontra provides deeper integration of
-  variable font technology and improved    usability of variable
+  variable font technology and improved usability of variable
   components as design elements.
 
 grade: stable
@@ -22,10 +20,14 @@ architectures:
 
 parts:
   fontrapak:
-    plugin: dump
+    plugin: python  # Use the Python plugin
     source: .
-    organize:
-      fontrapak: bin/fontrapak
+    python-requirements:
+      - requirements.txt
+      - requirements-dev.txt
+    python-packages:  # Add necessary Python packages
+      - fonttools
+      - PyQt6
     stage-packages:
       - libgl1
       - libegl1
@@ -36,14 +38,10 @@ parts:
       - libxcb-randr0
       - libxcb-xfixes0
       - libxkbcommon0
-      - libqt5gui5        # Often needed for Qt applications
-      - libqt5core5a      # Core Qt libraries
-      - libqt5widgets5    # If your application uses widgets
       - libqt6gui6        # If your application uses Qt 6
       - libqt6core6       # Core Qt 6 libraries
       - libqt6widgets6    # If your application uses Qt 6 widgets
       - libstdc++6        # Standard C++ library (often a dependency)
-
 
 icon: snap/gui/fontrapak.svg
 license: GPL-3.0+
@@ -55,10 +53,9 @@ plugs:
 apps:
   fontrapak:
     command: bin/fontrapak
-    #extensions: [gnome]
     environment:
       QT_QPA_PLATFORM: xcb # Required for Qt applications in a snap (PyInstaller often uses Qt)
-      QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins/platforms:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6/plugins/platforms # Explicitly set plugin path
+      QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6/plugins/platforms # Explicitly set plugin path
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa # Include Mesa libraries if needed
     plugs:
       - x11
