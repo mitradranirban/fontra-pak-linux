@@ -46,13 +46,7 @@ parts:
     build-snaps:
       - nodejs --channel=16/stable   # Request Node.js 16 from the snap store
     override-build: |
-      # Add /snap/bin to the PATH, which is where build snap binaries are often located
-      export PATH="/snap/bin:$PATH"
-
-      # Check if nodejs is available in /snap/nodejs/current as a fallback
-      if [ -d "/snap/nodejs/current" ]; then
-        export PATH="$PATH:/snap/nodejs/current/bin"
-      fi
+      . /var/lib/snapcraft/snapd-vars.sh
 
       # Verify the Node.js and npm versions
       node -v
