@@ -46,7 +46,7 @@ parts:
     build-snaps:
       - nodejs --channel=16/stable   # Request Node.js 16 from the snap store
     override-build: |
-      . /var/lib/snapcraft/snapd-vars.sh
+      sudo snap list nodejs
 
       # Verify the Node.js and npm versions
       node -v
