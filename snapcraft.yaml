@@ -46,21 +46,13 @@ parts:
     build-snaps:
       - nodejs --channel=16/stable   # Request Node.js 16 from the snap store
     override-build: |
-      # Try to get the installation path using craftctl
-      NODEJS_SNAP_MOUNT=$(craftctl get-path part-install)/nodejs
+      # Add /snap/bin to the PATH, which is where build snap binaries are often located
+      export PATH="/snap/bin:$PATH"
 
-      # Check if the path is valid
-      if [ ! -d "$NODEJS_SNAP_MOUNT" ]; then
-        echo "Error: Could not find nodejs at $NODEJS_SNAP_MOUNT.  Falling back to /snap/nodejs/current"
-        NODEJS_SNAP_MOUNT="/snap/nodejs/current"
-        if [ ! -d "$NODEJS_SNAP_MOUNT" ]; then
-           echo "Error: Could not find nodejs at /snap/nodejs/current.  Aborting"
-           exit 1
-        fi
+      # Check if nodejs is available in /snap/nodejs/current as a fallback
+      if [ -d "/snap/nodejs/current" ]; then
+        export PATH="$PATH:/snap/nodejs/current/bin"
       fi
-      
-      # Add the bin directory within the mount point to the PATH
-      export PATH="$NODEJS_SNAP_MOUNT/bin:$PATH"
 
       # Verify the Node.js and npm versions
       node -v
