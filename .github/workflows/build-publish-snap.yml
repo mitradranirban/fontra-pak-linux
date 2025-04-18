@@ -5,9 +5,13 @@ on:
     - cron: "22 1 * * 1-5"
   workflow_dispatch: # allow manual trigger+
 jobs:
-  build-snap:
+   build-snap:
     runs-on: ubuntu-latest
     steps:
+    - name: Install Node.js and npm
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
     - uses: actions/checkout@v4
     - uses: snapcore/action-build@v1
       id: build
