@@ -1,0 +1,19 @@
+name: Build and Publish snap every day
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: "22 1 * * 1-5"
+  workflow_dispatch: # allow manual trigger+
+jobs:
+  build-snap:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: snapcore/action-build@v1
+      id: build
+    - uses: snapcore/action-publish@v1
+      env:
+        SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+      with:
+        snap: ${{ steps.build.outputs.snap }}
+        release: edge
