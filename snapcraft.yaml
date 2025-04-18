@@ -44,10 +44,13 @@ parts:
       - libqt6widgets6    # If your application uses Qt 6 widgets
       - libstdc++6        # Standard C++ library (often a dependency)
     build-snaps:
-      - nodejs --channel=16/stable --classic # Request Node.js 16 from the snap store
+      - nodejs --channel=16/stable   # Request Node.js 16 from the snap store
     override-build: |
-      # Access the node and npm binaries provided by the snap
-      export PATH="$SNAPCRAFT_PART_INSTALL/nodejs/bin:$PATH"
+      # Find the mount point of the nodejs snap
+      NODEJS_SNAP_MOUNT=$(snapcraftctl get-host-path "/snap/nodejs/current")
+
+      # Add the nodejs bin directory to the PATH
+      export PATH="$NODEJS_SNAP_MOUNT/bin:$PATH"
 
       # Verify the Node.js and npm versions
       node -v
