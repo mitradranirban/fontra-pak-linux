@@ -30,7 +30,7 @@ parts:
       - fonttools
       - PyQt6
     build-snaps:
-      - nodejs --channel=16/stable   # Request Node.js 16 from the snap store
+      - nodejs --channel=16/stable --classic # Request Node.js 16 from the snap store
     stage-packages:
       - libgl1
       - libegl1
