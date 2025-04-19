@@ -31,6 +31,7 @@ parts:
       - PyQt6
     build-packages:
       - nodejs
+      - npm
     stage-packages:
       - libgl1
       - libegl1
