@@ -32,6 +32,7 @@ parts:
     build-packages:
       - nodejs
       - npm
+      - git
     stage-packages:
       - libgl1
       - libegl1
