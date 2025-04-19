@@ -8,15 +8,6 @@ jobs:
   build-snap:
     runs-on: ubuntu-latest
     steps:
-      # Step to set up Node.js and npm
-      - name: Install Node.js and npm
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16' # Specified Node.js version
-
-      # Step to verify npm installation
-      - name: Verify npm installation
-        run: npm --version
 
       # Step to check out the repository
       - uses: actions/checkout@v4
@@ -24,11 +15,15 @@ jobs:
       # Step to build the snap package
       - uses: snapcore/action-build@v1
         id: build
+      - name: copy created snap
+        run: |
+        mkdir ul
+        cp *.snap ul/
       - name: Upload Snap Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: snap
-          path: ${{ steps.snapcraft.outputs.snap }}
+          name: fontrasnap
+          path: ul
 
       # Step to publish the snap package
       #- uses: snapcore/action-publish@v1
