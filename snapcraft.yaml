@@ -56,7 +56,7 @@ parts:
       npm install
 
       # Proceed with the default Python build process
-      craftctl build
+      snapcraftctl build
 
 icon: snap/gui/fontrapak.svg
 license: GPL-3.0+
