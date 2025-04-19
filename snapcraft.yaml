@@ -29,8 +29,8 @@ parts:
     python-packages:  # Add necessary Python packages
       - fonttools
       - PyQt6
-    build-snaps:
-      - nodejs --channel=22/stable --classic # Request Node.js 16 from the snap store
+    build-packages:
+      - nodejs
     stage-packages:
       - libgl1
       - libegl1
@@ -47,8 +47,6 @@ parts:
       - libstdc++6      # Standard C++ library (often a dependency)
 
     override-build: |
-      snap list nodejs
-
       # Verify the Node.js and npm versions
       node -v
       npm -v
