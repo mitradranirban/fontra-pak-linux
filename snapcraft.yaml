@@ -57,7 +57,7 @@ parts:
       npm install
 
       # Proceed with the default Python build process
-      snapcraftctl build
+      craftctl default
 
 icon: snap/gui/fontrapak.svg
 license: GPL-3.0+
@@ -68,7 +68,7 @@ plugs:
 
 apps:
   fontrapak:
-    command: bin/fontrapak
+    command: bin/python3 FontraPakMain.py
     environment:
       QT_QPA_PLATFORM: xcb # Required for Qt applications in a snap (PyInstaller often uses Qt)
       QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6/plugins/platforms # Explicitly set plugin path
