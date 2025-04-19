@@ -24,11 +24,16 @@ jobs:
       # Step to build the snap package
       - uses: snapcore/action-build@v1
         id: build
+      - name: Upload Snap Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: snap
+          path: ${{ steps.snapcraft.outputs.snap }}7
 
       # Step to publish the snap package
-      - uses: snapcore/action-publish@v1
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
-        with:
-          snap: ${{ steps.build.outputs.snap }}
-          release: edge
+      #- uses: snapcore/action-publish@v1
+        #env:
+          #SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        #with:
+          #snap: ${{ steps.build.outputs.snap }}
+          #release: edge
