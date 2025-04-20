@@ -17,8 +17,8 @@ jobs:
         id: build
       - name: copy created snap
         run: |
-        mkdir ul
-        cp *.snap ul/
+          mkdir ul
+          cp *.snap ul/
       - name: Upload Snap Artifact
         uses: actions/upload-artifact@v4
         with:
