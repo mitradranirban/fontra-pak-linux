@@ -33,20 +33,48 @@ parts:
       - nodejs
       - npm
       - git
-    stage-packages:
+stage-packages:
       - libgl1
       - libegl1
-      - libxcb-cursor0  # Add this explicitly
+      - libxcb-cursor0
       - libxcb1
       - libxcb-render0
       - libxcb-shm0
       - libxcb-randr0
       - libxcb-xfixes0
       - libxkbcommon0
-      - libqt6gui6      # If your application uses Qt 6
-      - libqt6core6      # Core Qt 6 libraries
-      - libqt6widgets6    # If your application uses Qt 6 widgets
-      - libstdc++6      # Standard C++ library (often a dependency)
+      - libqt6gui6
+      - libqt6core6
+      - libqt6widgets6
+      - libstdc++6
+      - libpulse0          # For PulseAudio
+      - libatomic1         # For atomic operations
+      - libwayland-cursor0 # For Wayland
+      - libwayland-egl1    # For Wayland EGL
+      - libqt6opengl6      # Likely needed for Qt graphics
+      - libqt6multimedia6
+      - libqt6multimediawidgets6
+      - libqt63dcore6
+      - libqt63drender6
+      - libqt63danimation6
+      - libqt63dextras6
+      - libqt63dinput6
+      - libqt63dlogic6
+      - libqt63dquick6
+      - libqt6webview6
+      - libqt6webenginecore6
+      - libqt6webenginequick6
+      - libqt6declarative6  # For QML
+      - libgtk-3-0         # For GTK+ theming (if needed)
+      - libcups2           # For printing (if needed)
+      # - libmimer-client    # For Mimer SQL (if needed)
+      # - libmysqlclient21   # For MySQL (if needed)
+      # - libodbc2           # For ODBC (if needed)
+      # - libpq5             # For PostgreSQL (if needed)
+      - speechd            # For speech dispatcher (if needed)
+      - libgstreamer1.0-0  # For GStreamer
+      - libgstreamer-plugins-base1.0-0 # For GStreamer plugins
+      - libxrandr2         # For Xrandr     
 
     override-build: |
       # Verify the Node.js and npm versions
