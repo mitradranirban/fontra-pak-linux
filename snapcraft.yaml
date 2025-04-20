@@ -26,14 +26,11 @@ parts:
     python-requirements:
       - requirements.txt
       - requirements-dev.txt
-    python-packages:  # Add necessary Python packages
-      - fonttools
-      - PyQt6
     build-packages:
       - nodejs
       - npm
       - git
-stage-packages:
+    stage-packages:
       - libgl1
       - libegl1
       - libxcb-cursor0
