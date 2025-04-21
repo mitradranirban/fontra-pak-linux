@@ -11,10 +11,10 @@ jobs:
 
       # Step to check out the repository
       - uses: actions/checkout@v4
-
       # Step to build the snap package
       - uses: snapcore/action-build@v1
         id: build
+      # Step to upload snap as artifact
       - name: copy created snap
         run: |
           mkdir ul
@@ -22,13 +22,13 @@ jobs:
       - name: Upload Snap Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: fontrasnap
+          name: fontra
           path: ul
 
       # Step to publish the snap package
-      #- uses: snapcore/action-publish@v1
-        #env:
-          #SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
-        #with:
-          #snap: ${{ steps.build.outputs.snap }}
-          #release: edge
+      - uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: edge

@@ -1,19 +1,18 @@
-name: fontrapak
+name: fontra
 title: Fontra Pak (Unofficial snap package)
 base: core24 # the base snap is the execution environment for this snap
-version: '0.1.dev11310'
 summary: Browser-based variable-first font editor # 79 char long summary
 description: |
   Fontra is an open-source, browser-based, cross-platform, variable-first
   font editor. Fontra extends the boundaries of what current font editors
   can do. Originally developed to make the design and production of large
-  CJK fonts more efficient, Fontra provides deeper integration of
-  variable font technology and improved usability of variable
-  components as design elements.
+  CJK fonts more efficient, Fontra provides deeper integration of variable
+  font technology and improved usability of variable components as design
+  elements.
 
 grade: stable
 confinement: strict
-
+adopt-info: fontrapak
 platforms:
   amd64:
     build-on: amd64
@@ -25,7 +24,6 @@ parts:
     source: .
     python-requirements:
       - requirements.txt
-      - requirements-dev.txt
     build-packages:
       - nodejs
       - npm
@@ -48,31 +46,6 @@ parts:
       - libatomic1         # For atomic operations
       - libwayland-cursor0 # For Wayland
       - libwayland-egl1    # For Wayland EGL
-      - libqt6opengl6      # Likely needed for Qt graphics
-      - libqt6multimedia6
-      - libqt6multimediawidgets6
-      - libqt63dcore6
-      - libqt63drender6
-      - libqt63danimation6
-      - libqt63dextras6
-      - libqt63dinput6
-      - libqt63dlogic6
-      - libqt63dquick6
-      - libqt6webview6
-      - libqt6webenginecore6
-      - libqt6webenginequick6
-      - libqt6declarative6  # For QML
-      - libgtk-3-0         # For GTK+ theming (if needed)
-      - libcups2           # For printing (if needed)
-      # - libmimer-client    # For Mimer SQL (if needed)
-      # - libmysqlclient21   # For MySQL (if needed)
-      # - libodbc2           # For ODBC (if needed)
-      # - libpq5             # For PostgreSQL (if needed)
-      - speechd            # For speech dispatcher (if needed)
-      - libgstreamer1.0-0  # For GStreamer
-      - libgstreamer-plugins-base1.0-0 # For GStreamer plugins
-      - libxrandr2         # For Xrandr     
-
     override-build: |
       # Verify the Node.js and npm versions
       node -v
@@ -83,6 +56,10 @@ parts:
 
       # Proceed with the default Python build process
       craftctl default
+      # Step to create version from fontra  
+      echo $(python3 -c "import fontra; print(fontra.__version__)") > ./version.txt
+      VERSION_FROM_FILE=$(cat version.txt | tr -d '\n')
+      craftctl set version="$VERSION_FROM_FILE"
 
 icon: snap/gui/fontrapak.svg
 license: GPL-3.0+
@@ -95,7 +72,7 @@ apps:
   fontrapak:
     command: bin/python3 FontraPakMain.py
     environment:
-      QT_QPA_PLATFORM: xcb # Required for Qt applications in a snap (PyInstaller often uses Qt)
+      QT_QPA_PLATFORM: xcb  
       QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6/plugins/platforms # Explicitly set plugin path
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa # Include Mesa libraries if needed
     plugs:
