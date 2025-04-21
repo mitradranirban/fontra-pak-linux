@@ -46,6 +46,8 @@ parts:
       - libatomic1         # For atomic operations
       - libwayland-cursor0 # For Wayland
       - libwayland-egl1    # For Wayland EGL
+    stage: 
+      - FontraPakMain.py
     override-build: |
       # Verify the Node.js and npm versions
       node -v
@@ -56,10 +58,22 @@ parts:
 
       # Proceed with the default Python build process
       craftctl default
-      # Step to create version from fontra  
+      # Step to create version from fontra
       echo $(python3 -c "import fontra; print(fontra.__version__)") > ./version.txt
       VERSION_FROM_FILE=$(cat version.txt | tr -d '\n')
       craftctl set version="$VERSION_FROM_FILE"
+      echo '#!/bin/bash' > $CRAFT_PART_INSTALL/debug-launch.sh
+      echo 'echo "--- SNAP Environment Variables ---"' >> $CRAFT_PART_INSTALL/debug-launch.sh
+      echo 'env' >> $CRAFT_PART_INSTALL/debug-launch.sh
+      echo 'echo ""' >> $CRAFT_PART_INSTALL/debug-launch.sh
+      echo 'echo "--- Current Working Directory ---"' >> $CRAFT_PART_INSTALL/debug-launch.sh
+      echo 'pwd' >> $CRAFT_PART_INSTALL/debug-launch.sh
+      echo 'echo ""' >> $CRAFT_PART_INSTALL/debug-launch.sh
+      echo 'echo "--- Executing FontraPakMain.py ---"' >> $CRAFT_PART_INSTALL/debug-launch.sh
+      # Execute the Python script using absolute paths within the snap
+      echo 'exec $SNAP/bin/python3 $SNAP/FontraPakMain.py "$@"' >> $CRAFT_PART_INSTALL/debug-launch.sh
+      chmod +x $CRAFT_PART_INSTALL/debug-launch.sh
+      # --- End of debug script section ---
 
 icon: snap/gui/fontrapak.svg
 license: GPL-3.0+
@@ -70,9 +84,9 @@ plugs:
 
 apps:
   fontrapak:
-    command: bin/python3 FontraPakMain.py
+    command: debug-launch.sh
     environment:
-      QT_QPA_PLATFORM: xcb  
+      QT_QPA_PLATFORM: xcb
       QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt6/plugins/platforms # Explicitly set plugin path
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa # Include Mesa libraries if needed
     plugs:
