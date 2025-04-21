@@ -46,7 +46,7 @@ parts:
       - libatomic1         # For atomic operations
       - libwayland-cursor0 # For Wayland
       - libwayland-egl1    # For Wayland EGL
-    stage: 
+    stage:
       - FontraPakMain.py
     override-build: |
       # Verify the Node.js and npm versions
