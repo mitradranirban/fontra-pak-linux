@@ -1,0 +1,70 @@
+name: Conditional Build and Publish Snap
+
+on:
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      # Step to fetch the current version.txt from the external URL
+      - name: Fetch current version.txt
+        run: |
+          curl -o current_version.txt https://fonts.atipra.in/fontrapak/fontrapak/version.txt
+
+      # Step to compare current version with the previously stored version
+      - name: Compare versions
+        id: check_version
+        run: |
+          PREVIOUS_VERSION_FILE=".github/workflows/previous_version.txt"
+          if [ -f "$PREVIOUS_VERSION_FILE" ]; then
+            echo "Previous version file found."
+          else
+            echo "No previous version file found. Setting up for the first time."
+            echo "INITIAL" > $PREVIOUS_VERSION_FILE
+          fi
+
+          PREVIOUS_VERSION=$(cat $PREVIOUS_VERSION_FILE)
+          CURRENT_VERSION=$(cat current_version.txt)
+
+          if [ "$PREVIOUS_VERSION" != "$CURRENT_VERSION" ]; then
+            echo "Version has changed."
+            echo "changed=true" >> $GITHUB_ENV
+            echo $CURRENT_VERSION > $PREVIOUS_VERSION_FILE
+          else
+            echo "Version has not changed."
+            echo "changed=false" >> $GITHUB_ENV
+
+  build-and-publish:
+    runs-on: ubuntu-latest
+    needs: check-version
+    if: env.changed == 'true'
+    steps:
+      # Step to check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step to build the snap package
+      - name: Build Snap
+        uses: snapcore/action-build@v1
+        id: build
+
+      # Step to upload snap as an artifact
+      - name: Copy created snap
+        run: |
+          mkdir ul
+          cp *.snap ul/
+      - name: Upload Snap Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fontra
+          path: ul
+
+      # Step to publish the snap package
+      - name: Publish Snap
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: edge
