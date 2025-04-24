@@ -1,8 +1,8 @@
-name: Build and Publish snap every day
+name: Build and Publish snap every Sunday
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron: "22 1 * * 1-5"
+    - cron: "22 1 * * 7"
   workflow_dispatch: # allow manual trigger
 jobs:
   build-snap:
