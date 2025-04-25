@@ -8,39 +8,42 @@ jobs:
       changed: ${{ steps.check_version.outputs.changed }}
     steps:
       # Step to fetch the current version.txt from the external URL
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Fetch current version.txt
         run: |
           curl -o current_version.txt https://fonts.atipra.in/fontrapak/fontrapak/version.txt
+
       # Step to compare current version with the previously stored version
       - name: Compare versions
         id: check_version
         run: |
-          PREVIOUS_VERSION_FILE=".github/workflows/previous_version.txt"
-          # Checkout repository to access previous version file
-          git clone https://github.com/${{ github.repository }} repo
-          cd repo
-          if [ -f "$PREVIOUS_VERSION_FILE" ]; then
+          VERSION_FILE="version_tracker.txt"
+          if [ -f "$VERSION_FILE" ]; then
             echo "Previous version file found."
+            PREVIOUS_VERSION=$(cat $VERSION_FILE)
           else
             echo "No previous version file found. Setting up for the first time."
-            mkdir -p .github/workflows
-            echo "INITIAL" > $PREVIOUS_VERSION_FILE
+            PREVIOUS_VERSION="INITIAL"
           fi
-          PREVIOUS_VERSION=$(cat $PREVIOUS_VERSION_FILE)
-          cd ..
+
           CURRENT_VERSION=$(cat current_version.txt)
-          
+          echo "Previous version: $PREVIOUS_VERSION"
+          echo "Current version: $CURRENT_VERSION"
+  
           if [ "$PREVIOUS_VERSION" != "$CURRENT_VERSION" ]; then
             echo "Version has changed."
             echo "changed=true" >> $GITHUB_OUTPUT
             # Update the previous version file and commit it
-            cd repo
-            echo $CURRENT_VERSION > $PREVIOUS_VERSION_FILE
+            echo "$CURRENT_VERSION" > $VERSION_FILE
             git config --global user.name "GitHub Actions"
             git config --global user.email "actions@github.com"
-            git add $PREVIOUS_VERSION_FILE
-            git commit -m "Update version file to $CURRENT_VERSION"
-            git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+            git add $VERSION_FILE
+            git commit -m "Update version tracker to $CURRENT_VERSION"
+            git push
           else
             echo "Version has not changed."
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -54,20 +57,24 @@ jobs:
       # Step to check out the repository
       - name: Checkout repository
         uses: actions/checkout@v4
+      
       # Step to build the snap package
       - name: Build Snap
         uses: snapcore/action-build@v1
         id: build
+      
       # Step to upload snap as an artifact
       - name: Copy created snap
         run: |
           mkdir ul
           cp *.snap ul/
+      
       - name: Upload Snap Artifact
         uses: actions/upload-artifact@v4
         with:
           name: fontra
           path: ul
+      
       # Step to publish the snap package
       - name: Publish Snap
         uses: snapcore/action-publish@v1
