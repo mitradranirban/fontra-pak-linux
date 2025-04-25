@@ -1,5 +1,8 @@
-name: Conditional Build and Publish Snap
+name: Conditional Build and Publish Snap on weekdays
 on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron: "22 1 * * 1-5" 
   workflow_dispatch: # Allow manual trigger
 jobs:
   check-version:
