@@ -73,7 +73,7 @@ jobs:
       - name: Get version from version.txt
         id: get_version
         run: |
-          version=$(cat ./dl/fontrapak/fontrapak/version.txt)
+          version=$(cat ./dl/fontrapak/version.txt)
           # Remove whitespace if necessary
           version=$(echo "$version" | tr -d '[:space:]')
           echo "version=$version" >> $GITHUB_OUTPUT
