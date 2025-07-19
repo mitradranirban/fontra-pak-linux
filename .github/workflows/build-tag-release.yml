@@ -1,4 +1,4 @@
-name: Build and Upload Artifact
+name: Build and Release Linux Binary 
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
