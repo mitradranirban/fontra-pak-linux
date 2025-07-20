@@ -79,15 +79,15 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
 
       # Create GitHub Release with the tag from version.txt
-      - name: Create Release
-        id: create_release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.get_version.outputs.version }}
-          name: Release ${{ steps.get_version.outputs.version }}
-          body: Automated release for ${{ steps.get_version.outputs.version }}
-          draft: false
-          prerelease: false
+      # - name: Create Release
+      #  id: create_release
+      #  uses: ncipollo/release-action@v1
+      #  with:
+       #   tag: ${{ steps.get_version.outputs.version }}
+      #    name: Release ${{ steps.get_version.outputs.version }}
+       #   body: Automated release for ${{ steps.get_version.outputs.version }}
+       #   draft: false
+       #   prerelease: false
 
       # Upload fontrapak tarball as a release asset
       - name: Upload fontrapak binary
