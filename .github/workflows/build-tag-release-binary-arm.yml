@@ -1,7 +1,7 @@
 name: Build and Release ARM Linux Binary
 on:
   schedule:
-    - cron: "21 2 * * 1-6" # Runs one hour after the x86 workflow
+    - cron: "21 2 * * 0" # Runs one hour after the x86 workflow
   workflow_dispatch:
 
 jobs:
