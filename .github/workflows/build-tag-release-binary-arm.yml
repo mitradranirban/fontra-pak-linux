@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-ubuntu-arm-binary:
-    runs-on: ubuntu-22.05-arm
+    runs-on: ubuntu-22.04-arm
 
     steps:
       - name: Git checkout
