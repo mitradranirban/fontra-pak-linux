@@ -17,10 +17,18 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install latest CMake
+      - name: Build and install CMake 4.0.3 from source
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake
+          sudo apt-get install -y build-essential libssl-dev wget
+          wget https://github.com/Kitware/CMake/releases/download/v4.0.3/cmake-4.0.3.tar.gz
+          tar -xzvf cmake-4.0.3.tar.gz
+          cd cmake-4.0.3
+          ./bootstrap
+          make -j$(nproc)
+          sudo make install
+          cd ..
+          cmake --version
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -75,17 +83,6 @@ jobs:
           # Remove whitespace if necessary
           version=$(echo "$version" | tr -d '[:space:]')
           echo "version=$version" >> $GITHUB_OUTPUT
-
-      # Create GitHub Release with the tag from version.txt
-      # - name: Create Release
-      #  id: create_release
-      #  uses: ncipollo/release-action@v1
-      #  with:
-       #   tag: ${{ steps.get_version.outputs.version }}
-      #    name: Release ${{ steps.get_version.outputs.version }}
-       #   body: Automated release for ${{ steps.get_version.outputs.version }}
-       #   draft: false
-       #   prerelease: false
 
       # Upload fontrapak tarball as a release asset
       - name: Upload fontrapak binary
