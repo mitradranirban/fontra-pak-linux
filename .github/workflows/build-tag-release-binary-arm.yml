@@ -32,8 +32,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
-          python -m pip install -r requirements-dev.txt
+          CFLAGS="-Wno-format-overflow -Wno-error=format-overflow" pip install -r requirements.txt
+          
 
       - name: Build exe
         run: |
