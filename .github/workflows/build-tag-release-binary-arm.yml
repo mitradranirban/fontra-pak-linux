@@ -17,13 +17,13 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Build and install CMake 2.9 from source
+      - name: Build and install CMake 2.8.12.2 from source
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libssl-dev wget
-          wget https://cmake.org/files/v2.9/cmake-2.9.0.tar.gz
-          tar -xzvf cmake-2.9.0.tar.gz
-          cd cmake-2.9.0
+          wget https://cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
+          tar -xzvf cmake-2.8.12.2.tar.gz
+          cd cmake-2.8.12.2
           ./bootstrap
           make -j$(nproc)
           sudo make install
