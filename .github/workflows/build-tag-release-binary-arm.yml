@@ -31,7 +31,7 @@ jobs:
 
       - name: Patch cmake_minimum_required in CMakeLists.txt
         run: |
-          cd cffsubr-*
+          cd cffsubr-0.3.0
           # Patch all CMakeLists.txt files (root and subdirs)
           find . -name CMakeLists.txt -exec sed -i 's/cmake_minimum_required(VERSION [0-9.]\+)/cmake_minimum_required(VERSION 3.5)/' {} +
 
