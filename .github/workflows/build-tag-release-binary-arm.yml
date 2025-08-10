@@ -25,7 +25,7 @@ jobs:
       - name: Download ANTLR4 C++ runtime source
         run: |
            wget https://www.antlr.org/download/antlr4-cpp-runtime-4.13.2-source.zip
-           unzip antlr4-cpp-runtime-4.13.2-source.zip
+           unzip -o antlr4-cpp-runtime-4.13.2-source.zip
 
       - name: Patch ANTLR4 CMakeLists.txt for CMake >= 3.5 compatibility
         run: |
