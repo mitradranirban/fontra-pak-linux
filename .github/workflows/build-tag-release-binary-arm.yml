@@ -30,7 +30,7 @@ jobs:
       - name: Patch ANTLR4 CMakeLists.txt for CMake >= 3.5 compatibility
         run: |
            # Update minimum CMake version requirement to 3.5 or 3.28 as needed
-           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/' antlr4-cpp-runtime-4.13.2-source/runtime/Cpp/runtime/CMakeLists.txt
+           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/' antlr4-cpp-runtime-4.13.2-source/runtime/CMakeLists.txt
 
            # Patch googletest CMakeLists.txt inside external dependencies if present
            # Adjust path as necessary depending on how googletest is fetched or included
