@@ -17,22 +17,31 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Build and install CMake 2.8.12.2 from source
+      - name: install CMake  
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libssl-dev wget
-          wget https://cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
-          tar -xzvf cmake-2.8.12.2.tar.gz
-          cd cmake-2.8.12.2
-          ./bootstrap
-          make -j$(nproc)
-          sudo make install
-          cd ..
-          cmake --version
+          sudo apt-get install -y build-essential cmake
+      - name: Download cffsubr source
+        run: pip download --no-binary :all: cffsubr
+
+     - name: Extract cffsubr source
+       run: |
+         tar xvf cffsubr-*.tar.gz
+
+     - name: Patch cmake_minimum_required in CMakeLists.txt
+       run: |
+         cd cffsubr-*
+         # Patch all CMakeLists.txt files (root and subdirs)
+         find . -name CMakeLists.txt -exec sed -i 's/cmake_minimum_required(VERSION [0-9.]\+)/cmake_minimum_required(VERSION 3.5)/' {} +
+
+     - name: Install patched cffsubr
+       run: |
+         cd cffsubr-*
+         pip install .
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          CFLAGS="-Wno-format-overflow -Wno-error=format-overflow" pip install -r requirements.txt
+          pip install -r requirements.txt
           
 
       - name: Build exe
