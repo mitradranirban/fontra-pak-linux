@@ -29,20 +29,35 @@ jobs:
         run: |
           tar xvf cffsubr-*.tar.gz
 
-      - name: Patch cmake_minimum_required in CMakeLists.txt
+      - name: Install cffsubr with antlr4 runtime patching inline
         run: |
-          cd cffsubr-0.3.0
-          # Patch all CMakeLists.txt files (root and subdirs)
-          find . -name CMakeLists.txt -exec sed -i 's/cmake_minimum_required(VERSION [0-9.]\+)/cmake_minimum_required(VERSION 3.5)/' {} +
+          set -e
+          echo "Installing cffsubr with antlr4 runtime patch..."
 
-      - name: Install patched cffsubr
-        run: |
-          cd cffsubr-0.3.0
-          pip install .
+          # Create a background process to continuously patch antlr4 files
+          patch_antlr4_continuously() {
+            while true; do
+              find /tmp -name "CMakeLists.txt" -path "*antlr4*" 2>/dev/null | while read -r cmake_file; do
+                if grep -q "cmake_minimum_required.*VERSION.*[0-4]\." "$cmake_file" 2>/dev/null; then
+                  echo "Patching $cmake_file"
+                  sed -i 's/cmake_minimum_required.*VERSION [0-9.]*)/cmake_minimum_required(VERSION 3.5)/g' "$cmake_file"
+                fi
+              done
+              sleep 1
+            done
+          }
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+          patch_antlr4_continuously &
+          PATCHER_PID=$!
+          trap "kill $PATCHER_PID 2>/dev/null || true" EXIT
+
+          export CMAKE_ARGS="-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+          export CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)"
+
+          echo "Starting pip install..."
+          pip install --no-cache-dir -v -r requirements.txt
+          echo "Installation completed successfully!"
+
 
       - name: Build exe
         run: |
