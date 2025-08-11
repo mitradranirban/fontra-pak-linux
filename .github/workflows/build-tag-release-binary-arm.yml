@@ -38,8 +38,9 @@ jobs:
       - name: Build and install patched ANTLR4
         run: |
           cd antlr4
+          wget https://www.antlr.org/download/antlr-4.13.1-complete.jar -O antlr4.jar
           mkdir build && cd build
-          cmake .. -DWITH_DEMO=True
+          cmake .. -DWITH_DEMO=True -DANTLR_JAR_LOCATION=../antlr4.jar
           make -j$(nproc)
           sudo make install
 
