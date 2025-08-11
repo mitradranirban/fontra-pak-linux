@@ -24,21 +24,20 @@ jobs:
 
       - name: Download ANTLR4 C++ runtime source
         run: |
+           mkdir antlr4 
+           cd antlr4
            wget https://www.antlr.org/download/antlr4-cpp-runtime-4.13.2-source.zip
            unzip -o antlr4-cpp-runtime-4.13.2-source.zip
 
       - name: Patch ANTLR4 CMakeLists.txt for CMake >= 3.5 compatibility
         run: |
            # Update minimum CMake version requirement to 3.5 or 3.28 as needed
-           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/' antlr4-cpp-runtime-4.13.2-source/runtime/CMakeLists.txt
-
-           # Patch googletest CMakeLists.txt inside external dependencies if present
-           # Adjust path as necessary depending on how googletest is fetched or included
-           find antlr4-cpp-runtime-4.13.2-source -name CMakeLists.txt -exec sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.5)/' {} +
-
+           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/'  antlr4/runtime/_deps/googletest-src/googletest/CMakeLists.txt
+           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/'  antlr4/runtime/_deps/googletest-src/CMakeLists.txt
+           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/'  antlr4/runtime/_deps/googletest-src/googlemock/CMakeLists.txt
       - name: Build and install patched ANTLR4
         run: |
-          cd antlr4-cpp-runtime-4.13.2-source
+          cd antlr4
           mkdir build && cd build
           cmake .. -DWITH_DEMO=True
           make -j$(nproc)
