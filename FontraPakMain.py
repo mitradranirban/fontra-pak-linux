@@ -11,6 +11,7 @@ import threading
 import webbrowser
 from contextlib import aclosing
 from urllib.parse import quote
+
 import psutil
 from fontra import __version__ as fontraVersion
 from fontra.backends import getFileSystemBackend, newFileSystemBackend
@@ -480,7 +481,7 @@ class FontraPakProjectManager(FileSystemProjectManager):
         self.appQueue.put(("exportAs", fontHandler.projectIdentifier, options))
 
 
-def runFontraServer(port, queue):
+def runFontraServer(host, port, queue):
     logging.basicConfig(
         format="%(asctime)s %(name)-17s %(levelname)-8s %(message)s",
         level=logging.INFO,
@@ -489,7 +490,7 @@ def runFontraServer(port, queue):
     manager = FontraPakProjectManager(None)
     manager.appQueue = queue
     server = FontraServer(
-        host="localhost",
+        host=host,
         httpPort=port,
         projectManager=manager,
         versionToken=secrets.token_hex(4),
@@ -541,8 +542,11 @@ def queueGetter(queue, callback):
 
 def main():
     queue = multiprocessing.Queue()
-    port = findFreeTCPPort()
-    serverProcess = multiprocessing.Process(target=runFontraServer, args=(port, queue))
+    host = "localhost"
+    port = findFreeTCPPort(host=host)
+    serverProcess = multiprocessing.Process(
+        target=runFontraServer, args=(host, port, queue)
+    )
     serverProcess.start()
 
     app = FontraApplication(sys.argv, port)
@@ -550,7 +554,12 @@ def main():
     def cleanup():
         queue.put(None)
         thread.join()
-        os.kill(serverProcess.pid, signal.SIGINT)
+        process = psutil.Process(serverProcess.pid)
+        for p in [process] + process.children(recursive=True):
+            if sys.platform != "win32":
+                p.send_signal(psutil.signal.SIGINT)
+            else:
+                p.terminate()
 
     app.aboutToQuit.connect(cleanup)
 
