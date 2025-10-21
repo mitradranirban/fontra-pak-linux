@@ -1,3 +1,4 @@
+
 import asyncio
 import logging
 import multiprocessing
@@ -10,6 +11,7 @@ import tempfile
 import threading
 import webbrowser
 from contextlib import aclosing
+from dataclasses import dataclass
 from urllib.parse import quote
 
 import psutil
@@ -473,12 +475,15 @@ def showMessageDialog(
     dialog.exec()
 
 
-class FontraPakProjectManager(FileSystemProjectManager):
+@dataclass
+class FontraPakExportManager:
+    appQueue: multiprocessing.Queue
+
     def getSupportedExportFormats(self):
         return [typ for (_name, typ) in exportFileTypes]
 
-    async def exportAs(self, fontHandler, options):
-        self.appQueue.put(("exportAs", fontHandler.projectIdentifier, options))
+    async def exportAs(self, projectIdentifier, options):
+        self.appQueue.put(("exportAs", projectIdentifier, options))
 
 
 def runFontraServer(host, port, queue):
@@ -487,12 +492,15 @@ def runFontraServer(host, port, queue):
         level=logging.INFO,
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-    manager = FontraPakProjectManager(None)
-    manager.appQueue = queue
+
+    projectManager = FileSystemProjectManager(
+        None, exportManager=FontraPakExportManager(queue)
+    )
+
     server = FontraServer(
         host=host,
         httpPort=port,
-        projectManager=manager,
+        projectManager=projectManager,
         versionToken=secrets.token_hex(4),
     )
     server.setup()
