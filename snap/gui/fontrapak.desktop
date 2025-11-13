@@ -1,6 +1,6 @@
 #!/usr/bin/env xdg-open
 [Desktop Entry]
-Version=0.1
+Version=25.11.1
 Terminal=false
 Type=Application
 Name=fontrapak
