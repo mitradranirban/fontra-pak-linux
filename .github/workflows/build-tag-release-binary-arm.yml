@@ -24,7 +24,7 @@ jobs:
 
       - name: Download ANTLR4 C++ runtime source
         run: |
-           mkdir antlr4 
+           mkdir antlr4
            cd antlr4
            wget https://www.antlr.org/download/antlr4-cpp-runtime-4.13.2-source.zip
            unzip -o antlr4-cpp-runtime-4.13.2-source.zip
