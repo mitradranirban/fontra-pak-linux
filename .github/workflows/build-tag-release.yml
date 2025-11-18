@@ -101,8 +101,9 @@ jobs:
       - name: Upload fontrapak binary
         uses: softprops/action-gh-release@v2
         with:
-          files: ./dl/fontrapak.tgz
-          files: ./dl/fontrapak.tgz.sha256 
+          files: |
+            ./dl/fontrapak.tgz
+            ./dl/fontrapak.tgz.sha256
           tag_name: ${{ steps.get_version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
