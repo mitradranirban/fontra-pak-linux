@@ -76,6 +76,8 @@ jobs:
         run: |
           cd ./dl
           tar -czvf fontrapak.tgz "fontrapak"
+      - name: Generate SHA256 checksum file
+        run: sha256sum ./dl/fontrapak.tgz > ./dl/fontrapak.tgz.sha256
 
       # Read version.txt into a variable
       - name: Get version from version.txt
