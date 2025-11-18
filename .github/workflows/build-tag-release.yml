@@ -39,9 +39,6 @@ jobs:
         run: |
           pyinstaller FontraPak.spec -y
           mv dist/Fontra\ Pak dist/fontrapak
-      - name: Generate SHA256 checksum file
-        run: sha256sum dist/fontrapak.tgz > dist/fontrapak.tgz.sha256
-
       - name: Run tests
         run: |
           pytest
