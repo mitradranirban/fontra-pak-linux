@@ -39,6 +39,8 @@ jobs:
         run: |
           pyinstaller FontraPak.spec -y
           mv dist/Fontra\ Pak dist/fontrapak
+      - name: Generate SHA256 checksum file
+        run: sha256sum dist/fontrapak.tgz > dist/fontrapak.tgz.sha256
 
       - name: Run tests
         run: |
@@ -100,6 +102,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ./dl/fontrapak.tgz
+          files: ./dl/fontrapak.tgz.sha256 
           tag_name: ${{ steps.get_version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
