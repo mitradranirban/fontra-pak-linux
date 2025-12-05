@@ -10,39 +10,19 @@ jobs:
 
     steps:
       - name: Git checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.13
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.13"
       - name: install CMake
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential cmake
 
 
-      - name: Download ANTLR4 C++ runtime source
-        run: |
-           mkdir antlr4
-           cd antlr4
-           wget https://www.antlr.org/download/antlr4-cpp-runtime-4.13.2-source.zip
-           unzip -o antlr4-cpp-runtime-4.13.2-source.zip
-
-      - name: Patch ANTLR4 CMakeLists.txt for CMake >= 3.5 compatibility
-        run: |
-           # Update minimum CMake version requirement to 3.5 or 3.28 as needed
-           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/'  antlr4/runtime/_deps/googletest-src/googletest/CMakeLists.txt
-           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/'  antlr4/runtime/_deps/googletest-src/CMakeLists.txt
-           sed -i 's/cmake_minimum_required(VERSION .*)/cmake_minimum_required(VERSION 3.28)/'  antlr4/runtime/_deps/googletest-src/googlemock/CMakeLists.txt
-      - name: Build and install patched ANTLR4
-        run: |
-          cd antlr4
-          wget https://www.antlr.org/download/antlr-4.13.1-complete.jar -O antlr4.jar
-          mkdir build && cd build
-          cmake .. -DWITH_DEMO=True -DANTLR_JAR_LOCATION=../antlr4.jar
-          make -j$(nproc)
-          sudo make install
+    
 
       - name: Install  dependencies
         run: |
@@ -96,7 +76,7 @@ jobs:
       - name: Get version from version.txt
         id: get_version
         run: |
-          version=$(cat ./dl/fontrapak-arm/version.txt)
+          version=$(cat ./dl/fontrapak-arm/version.txt)-arm
           # Remove whitespace if necessary
           version=$(echo "$version" | tr -d '[:space:]')
           echo "version=$version" >> $GITHUB_OUTPUT
