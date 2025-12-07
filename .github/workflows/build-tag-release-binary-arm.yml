@@ -1,4 +1,4 @@
-name: Build and Release ARM Linux Binary
+hiname: Build and Release ARM Linux Binary
 on:
   schedule:
     - cron: "21 2 * * 0" # Runs one hour after the x86 workflow
@@ -27,6 +27,7 @@ jobs:
       - name: Install  dependencies
         run: |
           pip install -r requirements.txt
+          pip install -r requirements-dev.txt
 
       - name: Build exe
         run: |
