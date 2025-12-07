@@ -1,4 +1,4 @@
-hiname: Build and Release ARM Linux Binary
+name: Build and Release ARM Linux Binary
 on:
   schedule:
     - cron: "21 2 * * 0" # Runs one hour after the x86 workflow
